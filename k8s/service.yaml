@@ -1,0 +1,14 @@
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-app-service
+spec:
+  selector:
+    app: devops-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+```

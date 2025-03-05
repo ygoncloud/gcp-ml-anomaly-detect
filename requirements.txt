@@ -1,0 +1,8 @@
+```txt
+flask
+numpy
+pandas
+tensorflow
+scikit-learn
+requests
+```

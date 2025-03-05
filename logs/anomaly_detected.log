@@ -1,0 +1,7 @@
+```log
+2024-03-06T12:00:00Z ERROR Database connection failed
+2024-03-06T12:02:30Z ERROR Timeout occurred while fetching data
+2024-03-06T12:04:15Z ERROR Failed to write to log file
+2024-03-06T12:06:40Z ERROR Unauthorized access attempt detected
+2024-03-06T12:08:55Z ERROR High memory usage alert triggered
+```

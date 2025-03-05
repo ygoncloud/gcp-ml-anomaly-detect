@@ -1,0 +1,21 @@
+```json
+{
+  "condition": {
+    "query": {
+      "match": {
+        "loglevel": "ERROR"
+      }
+    },
+    "script": {
+      "source": "doc['anomaly_score'].value > 0.8"
+    }
+  },
+  "action": {
+    "webhook": {
+      "method": "POST",
+      "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+      "body": "Anomaly detected in logs!"
+    }
+  }
+}
+```

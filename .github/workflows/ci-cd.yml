@@ -1,0 +1,99 @@
+name: GCP DevOps CI/CD with Machine Learning Anomaly Detection
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-train-ml-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r ml/requirements.txt
+
+      - name: Train ML Model
+        run: |
+          python ml/train_log_anomaly_model.py
+
+      - name: Save Trained Model
+        run: |
+          mkdir -p ml/model/
+          mv log_anomaly_model.h5 ml/model/log_anomaly_model.h5
+
+      - name: Upload Model as an Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: anomaly-detection-model
+          path: ml/model/log_anomaly_model.h5
+
+  build-and-deploy:
+    needs: build-train-ml-model
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Download ML Model Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: anomaly-detection-model
+          path: ml/model/
+
+      - name: Authenticate with GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure Docker to use GCR
+        run: gcloud auth configure-docker
+
+      - name: Build and Push ML Anomaly Detection Service
+        run: |
+          docker build -t gcr.io/your-gcp-project-id/log-anomaly-service ./ml
+          docker push gcr.io/your-gcp-project-id/log-anomaly-service
+
+      - name: Deploy ML Anomaly Detection Service
+        run: |
+          gcloud container clusters get-credentials devops-cluster --region us-central1
+          kubectl apply -f k8s/log-anomaly-deployment.yaml
+          kubectl apply -f k8s/log-anomaly-service.yaml
+
+      - name: Build and Push DevOps App
+        run: |
+          docker build -t gcr.io/your-gcp-project-id/devops-app:latest .
+          docker push gcr.io/your-gcp-project-id/devops-app:latest
+
+      - name: Deploy DevOps App
+        run: |
+          gcloud container clusters get-credentials devops-cluster --region us-central1
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/ingress.yaml
+          kubectl apply -f monitoring/logstash-config.yaml
+          kubectl apply -f monitoring/kibana-alerts.json
+          kubectl apply -f monitoring/prometheus-values.yaml
+          kubectl apply -f monitoring/grafana-dashboards.yaml
+          kubectl apply -f monitoring/otel-config.yaml
+
+      - name: Check Deployment Health
+        run: |
+          sleep 10
+          kubectl rollout status deployment/devops-app || (kubectl rollout undo deployment/devops-app && exit 1)
+
+      - name: Push Logs to OpenTelemetry
+        run: |
+          kubectl apply -f monitoring/otel-config.yaml
+          kubectl apply -f monitoring/prometheus-values.yaml
+

@@ -1,0 +1,7 @@
+```log
+2024-03-06T12:00:00Z INFO Application started successfully
+2024-03-06T12:01:30Z INFO User logged in
+2024-03-06T12:03:15Z INFO Data fetched from API successfully
+2024-03-06T12:05:45Z INFO Health check passed
+2024-03-06T12:07:20Z INFO Scheduled job completed
+```

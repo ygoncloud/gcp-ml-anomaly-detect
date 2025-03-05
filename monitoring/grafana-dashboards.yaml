@@ -1,0 +1,37 @@
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  labels:
+    grafana_dashboard: "1"
+data:
+  kubernetes-dashboard.json: |
+    {
+      "annotations": {"list": []},
+      "title": "Kubernetes Cluster Overview",
+      "panels": [
+        {
+          "title": "CPU Usage",
+          "type": "graph",
+          "targets": [
+            {
+              "expr": "sum(rate(container_cpu_usage_seconds_total[5m])) by (pod)",
+              "legendFormat": "{{pod}}"
+            }
+          ]
+        },
+        {
+          "title": "Memory Usage",
+          "type": "graph",
+          "targets": [
+            {
+              "expr": "sum(container_memory_usage_bytes) by (pod)",
+              "legendFormat": "{{pod}}"
+            }
+          ]
+        }
+      ],
+      "schemaVersion": 16
+    }
+```
