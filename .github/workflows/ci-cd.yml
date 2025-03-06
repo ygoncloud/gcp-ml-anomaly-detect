@@ -22,16 +22,6 @@ jobs:
         run: |
           pip install -r ml/requirements.txt
 
-      - name: Debug CSV File
-        run: |
-          ls -lah
-          cat logs.csv || echo "logs.csv not found"
-          python -c "import pandas as pd; df = pd.read_csv('logs.csv'); print(df.head()); print(df.columns)"
-
-      - name: Generate Logs
-        run: |
-          python generate_logs.py
-
       - name: Train ML Model
         run: |
           python ml/train_log_anomaly_model.py
