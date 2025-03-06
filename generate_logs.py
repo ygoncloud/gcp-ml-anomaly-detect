@@ -5,6 +5,6 @@ data = {"timestamp": ["2024-02-01 12:00", "2024-02-01 12:05"], "event": ["login"
 df = pd.DataFrame(data)
 
 # Simpan file logs.csv
-df.to_csv("logs.csv", index=False)
-print("logs.csv created!")
+log_data = df.to_csv("logs.csv", header=none)
+print(log_data())
 
