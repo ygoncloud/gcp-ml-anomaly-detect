@@ -24,7 +24,7 @@ jobs:
 
       - name: Generate Logs
         run: |
-        python generate_logs.py
+          python generate_logs.py
 
       - name: Train ML Model
         run: |
