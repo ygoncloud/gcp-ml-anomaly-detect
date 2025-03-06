@@ -9,8 +9,18 @@ from sklearn.preprocessing import LabelEncoder
 import os
 print("Current Working Directory:", os.getcwd())  # Debugging
 print("Files in Directory:", os.listdir())  # Listt All File
+with open("logs.csv", "r") as file:
+    print("logs.csv content preview:")
+    print(file.read())  # Print contents of logs.csv
 log_data = pd.read_csv("logs.csv")  # Replace with ELK API query
+print("CSV Columns:", log_data.columns.tolist())  # Print available columns
 log_data['message'] = log_data['message'].astype(str)
+
+if 'message' not in log_data.columns:
+    raise ValueError("❌ ERROR: Column 'message' is missing in logs.csv!")
+
+if 'loglevel' not in log_data.columns:
+    raise ValueError("❌ ERROR: Column 'loglevel' is missing in logs.csv!")
 
 # Encode log messages
 encoder = LabelEncoder()
