@@ -6,7 +6,7 @@ from tensorflow.keras.layers import Dense, LSTM, Dropout
 from sklearn.preprocessing import LabelEncoder
 
 # Load log data from Elasticsearch
-log_data = pd.read_csv("logs.csv")  # Replace with ELK API query
+log_data = pd.read_csv("log_sample.csv")  # Replace with ELK API query
 log_data['message'] = log_data['message'].astype(str)
 
 # Encode log messages
