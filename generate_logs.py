@@ -6,5 +6,5 @@ df = pd.DataFrame(data)
 
 # Simpan file logs.csv
 log_data = df.to_csv("logs.csv", header=None)
-print(log_data())
+print(log_data)
 
