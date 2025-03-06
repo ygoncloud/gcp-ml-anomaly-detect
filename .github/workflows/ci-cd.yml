@@ -32,7 +32,7 @@ jobs:
           mv log_anomaly_model.h5 ml/model/log_anomaly_model.h5
 
       - name: Upload Model as an Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: anomaly-detection-model
           path: ml/model/log_anomaly_model.h5
