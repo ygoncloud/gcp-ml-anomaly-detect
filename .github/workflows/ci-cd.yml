@@ -29,8 +29,8 @@ jobs:
           echo "2025-03-07T12:01:00Z,INFO,User logged in" >> logs/log_sample.csv
           echo "2025-03-07T12:02:00Z,ERROR,Database connection failed" >> logs/log_sample.csv
 
-- name: Train ML Model
-  run: python ml/train_log_anomaly_model.py
+      - name: Train ML Model
+        run: python ml/train_log_anomaly_model.py
 
 
       - name: Train ML Model
