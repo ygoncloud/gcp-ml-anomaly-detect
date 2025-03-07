@@ -16,43 +16,6 @@ This project automates **log anomaly detection** in a **GCP DevOps environment**
 
 ---
 
-## 🏗️ Project Architecture
-```
-📂 gcp-devops-anomaly-detection
- ┣ 📂 k8s
- ┃ ┣ 📜 deployment.yaml           # Kubernetes Deployment & Service for app
- ┃ ┣ 📜 service.yaml              # Kubernetes Service
- ┃ ┣ 📜 ingress.yaml              # Ingress configuration for load balancing
- ┣ 📂 monitoring
- ┃ ┣ 📜 prometheus-values.yaml    # Prometheus custom configuration
- ┃ ┣ 📜 grafana-dashboards.yaml   # Pre-configured Grafana Dashboards
- ┃ ┣ 📜 logstash-config.yaml      # Logstash configuration for collecting logs
- ┃ ┣ 📜 kibana-alerts.json        # Kibana Alerts for log anomaly detection
- ┣ 📂 ml
- ┃ ┣ 📜 train_log_anomaly_model.py # Machine Learning script to train anomaly detection model
- ┃ ┣ 📜 log_anomaly_service.py     # API for real-time log anomaly detection
- ┃ ┣ 📜 log_sample.csv            # Sample log dataset for training ML model
- ┃ ┣ 📜 model/log_anomaly_model.h5 # Trained ML model
- ┣ 📂 scripts
- ┃ ┣ 📜 deploy.sh                 # Bash script to automate deployment
- ┃ ┣ 📜 cleanup.sh                # Bash script to clean up resources
- ┣ 📂 .github/workflows
- ┃ ┣ 📜 ci-cd.yml                 # GitHub Actions CI/CD pipeline with anomaly detection
- ┣ 📂 terraform
- ┃ ┣ 📜 main.tf                    # Terraform script to provision GCP infrastructure
- ┃ ┣ 📜 variables.tf               # Terraform variables for project setup
- ┃ ┣ 📜 outputs.tf                 # Terraform output values
- ┣ 📂 logs
- ┃ ┣ 📜 anomaly_detected.log        # Sample logs with anomalies
- ┃ ┣ 📜 normal_logs.log             # Sample logs without anomalies
- ┣ 📜 Dockerfile                    # Dockerfile to containerize the anomaly detection API
- ┣ 📜 app.py                         # Flask application for testing deployments
- ┣ 📜 requirements.txt               # Python dependencies
- ┣ 📜 README.md                      # Documentation for the project
-```
-
----
-
 ## 📂 Setup & Deployment
 ### **1️⃣ Prerequisites**
 Ensure you have installed:
