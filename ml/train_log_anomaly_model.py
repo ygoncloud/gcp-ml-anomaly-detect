@@ -57,9 +57,9 @@ model.fit(X_train, y_train, epochs=10, batch_size=32)
 
 # Ensure the model directory exists before saving
 MODEL_DIR = "ml/model"
-if not os.path.exists(MODEL_DIR):
-    os.makedirs(MODEL_DIR)
+os.makedirs(MODEL_DIR, exist_ok=True)
 
-model.save(f"{MODEL_DIR}/log_anomaly_model.h5")
-print(f"✅ Model saved to {MODEL_DIR}/log_anomaly_model.h5")
+MODEL_PATH = os.path.join(MODEL_DIR, "log_anomaly_model.h5")
+model.save(MODEL_PATH)
+print(f"✅ Model saved to {MODEL_PATH}")
 
