@@ -109,3 +109,5 @@ helm uninstall elasticsearch kibana logstash -n monitoring
 ✅ **Cloud-Native & CI/CD Ready** for scalable deployments  
 
 
+### ⭐ Like this project? Give it a star on GitHub! ⭐
+
