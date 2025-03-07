@@ -1,0 +1,5 @@
+timestamp,loglevel,message
+2025-03-07T12:00:00Z,INFO,Application started
+2025-03-07T12:01:00Z,INFO,User logged in
+2025-03-07T12:02:00Z,ERROR,Database connection failed
+
