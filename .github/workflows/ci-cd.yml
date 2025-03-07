@@ -33,10 +33,16 @@ jobs:
         run: |
           python ml/train_log_anomaly_model.py
 
-      - name: Save Trained Model
+      - name: Move & Save Trained Model
         run: |
           mkdir -p ml/model/
-          mv log_anomaly_model.h5 ml/model/log_anomaly_model.h5
+          if [ -f "ml/model/log_anomaly_model.h5" ]; then
+            echo "✅ Model file exists, moving it..."
+            mv ml/model/log_anomaly_model.h5 ml/model/log_anomaly_model.h5
+          else
+            echo "🚨 ERROR: Model file not found!"
+            exit 1
+          fi
 
       - name: Upload Model as an Artifact
         uses: actions/upload-artifact@v4
