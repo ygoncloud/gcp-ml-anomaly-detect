@@ -33,12 +33,10 @@ jobs:
         run: |
           python ml/train_log_anomaly_model.py
 
-      - name: Move & Save Trained Model
+      - name: Move Trained Model (Only If Needed)
         run: |
-          mkdir -p ml/model/
           if [ -f "ml/model/log_anomaly_model.h5" ]; then
-            echo "✅ Model file exists, moving it..."
-            mv ml/model/log_anomaly_model.h5 ml/model/log_anomaly_model.h5
+            echo "✅ Model already in correct location. Skipping move."
           else
             echo "🚨 ERROR: Model file not found!"
             exit 1
