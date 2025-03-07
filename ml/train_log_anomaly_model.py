@@ -63,3 +63,6 @@ MODEL_PATH = os.path.join(MODEL_DIR, "log_anomaly_model.h5")
 model.save(MODEL_PATH)
 print(f"✅ Model saved to {MODEL_PATH}")
 
+# Debugging: Check if model file exists
+if not os.path.exists(MODEL_PATH):
+    print(f"🚨 ERROR: Model file {MODEL_PATH} was not found after saving!")
