@@ -56,7 +56,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 model.fit(X_train, y_train, epochs=10, batch_size=32)
 
 # Ensure the model directory exists before saving
-MODEL_DIR = "model"
+MODEL_DIR = "ml/model"
 if not os.path.exists(MODEL_DIR):
     os.makedirs(MODEL_DIR)
 
