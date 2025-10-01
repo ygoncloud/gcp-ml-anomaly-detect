@@ -48,8 +48,27 @@ jobs:
           name: anomaly-detection-model
           path: ml/model/log_anomaly_model.h5
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          pytest
+
   build-and-deploy:
-    needs: build-train-ml-model
+    needs: [build-train-ml-model, test]
     runs-on: ubuntu-latest
 
     steps:
@@ -65,15 +84,20 @@ jobs:
       - name: Authenticate with GCP
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          workload_identity_provider: 'projects/your-gcp-project-id/locations/global/workloadIdentityPools/your-pool-id/providers/your-provider-id'
+          service_account: 'your-service-account-email@your-gcp-project-id.iam.gserviceaccount.com'
+
+      - name: Grant permissions to the runner
+        run: |
+          gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} --member="serviceAccount:${{ env.SA_EMAIL }}" --role="roles/owner"
 
       - name: Configure Docker to use GCR
         run: gcloud auth configure-docker
 
       - name: Build and Push ML Anomaly Detection Service
         run: |
-          docker build -t gcr.io/your-gcp-project-id/log-anomaly-service ./ml
-          docker push gcr.io/your-gcp-project-id/log-anomaly-service
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/log-anomaly-service -f ml/Dockerfile ./ml
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/log-anomaly-service
 
       - name: Deploy ML Anomaly Detection Service
         run: |
@@ -83,8 +107,8 @@ jobs:
 
       - name: Build and Push DevOps App
         run: |
-          docker build -t gcr.io/your-gcp-project-id/devops-app:latest .
-          docker push gcr.io/your-gcp-project-id/devops-app:latest
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/devops-app:latest -f Dockerfile .
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/devops-app:latest
 
       - name: Deploy DevOps App
         run: |

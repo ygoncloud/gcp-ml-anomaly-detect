@@ -1,113 +1,71 @@
-# 🚀 GCP DevOps: Machine Learning-Based Log Anomaly Detection
+# Log Anomaly Detection
 
-## 📌 Overview
-This project automates **log anomaly detection** in a **GCP DevOps environment** using **machine learning, Kubernetes (GKE), ELK (Elasticsearch, Logstash, Kibana), Prometheus, Grafana, and OpenTelemetry**. The system **collects logs from Kubernetes pods, detects anomalies using an AI model, and triggers alerts for suspicious activity**.
+[![CI/CD](https://github.com/mumei/gcp-ml-anomaly-detect/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/mumei/gcp-ml-anomaly-detect/actions/workflows/ci-cd.yml)
 
----
+This project provides a framework for detecting anomalies in application logs using machine learning. It is designed to be deployed on Google Cloud Platform (GCP) using Kubernetes (GKE) and includes a complete CI/CD pipeline using GitHub Actions.
 
-## 🔧 Features
-✅ **AI-Powered Log Anomaly Detection** with a trained ML model (TensorFlow/Keras)  
-✅ **Log Collection & Analysis** using **ELK Stack (Elasticsearch, Logstash, Kibana)**  
-✅ **Custom Dashboards** in **Grafana & Kibana**  
-✅ **Distributed Tracing** with **OpenTelemetry**  
-✅ **Alerts to Slack on Anomalies** via **Prometheus AlertManager**  
-✅ **CI/CD Pipeline with Anomaly Detection Pre-Deployment Checks**  
-✅ **Auto-Healing & Rollback on Bad Deployments**  
+The system collects logs from Kubernetes pods, uses a trained machine learning model to detect anomalies, and provides tools for monitoring and alerting.
 
----
+## Features
 
-## 📂 Setup & Deployment
-### **1️⃣ Prerequisites**
-Ensure you have installed:
-- **Terraform** (>=1.0)
-- **Google Cloud SDK (gcloud CLI)**
-- **Docker**
-- **kubectl**
-- **Helm**
-- **Python3, TensorFlow/Keras, Scikit-Learn**
+*   **Machine Learning-Based Anomaly Detection:** A pre-trained LSTM model for identifying anomalous log entries.
+*   **GCP Deployment:** All infrastructure is provisioned using Terraform, and the application is deployed to GKE.
+*   **CI/CD Pipeline:** A complete GitHub Actions workflow for continuous integration and deployment.
+*   **Monitoring and Alerting:** Integration with Prometheus, Grafana, and the ELK stack for observability.
+*   **Structured Logging:** The application uses structured logging in JSON format for easy parsing and analysis.
 
-### **2️⃣ Deploy GKE, ELK, and OpenTelemetry**
+## Getting Started
+
+### Prerequisites
+
+*   [Terraform](https://www.terraform.io/)
+*   [Google Cloud SDK](https://cloud.google.com/sdk)
+*   [Docker](https://www.docker.com/)
+*   [kubectl](https://kubernetes.io/docs/tasks/tools/)
+*   [Python 3.9+](https://www.python.org/)
+
+### Installation
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/mumei/gcp-ml-anomaly-detect.git
+    cd gcp-ml-anomaly-detect
+    ```
+
+2.  **Set up your GCP project:**
+
+    ```bash
+    gcloud auth application-default login
+    gcloud config set project <YOUR_PROJECT_ID>
+    ```
+
+3.  **Deploy the infrastructure:**
+
+    ```bash
+    terraform init
+    terraform apply
+    ```
+
+4.  **Deploy the application:**
+
+    The CI/CD pipeline will automatically deploy the application when you push to the `main` branch. Alternatively, you can run the deployment script manually:
+
+    ```bash
+    ./scripts/deploy.sh
+    ```
+
+## Monitoring
+
+Once the application is deployed, you can access the monitoring dashboards:
+
+*   **Grafana:** `kubectl port-forward svc/grafana 3000:80 -n monitoring`
+*   **Kibana:** `kubectl port-forward svc/kibana 5601:80 -n monitoring`
+
+## Cleanup
+
+To remove all resources created by this project, run:
+
 ```bash
-gcloud auth application-default login
-gcloud config set project <YOUR_PROJECT_ID>
-terraform init
-terraform apply -auto-approve
+terraform destroy
 ```
-
-### **3️⃣ Deploy Log Anomaly Detector**
-```bash
-python ml/log_anomaly_service.py
-```
-
-### **4️⃣ Run Deployment Script**
-```bash
-chmod +x scripts/deploy.sh
-./scripts/deploy.sh
-```
-
-### **5️⃣ Trigger CI/CD (Pushing Code)**
-```bash
-git add .
-git commit -m "Deploy with log anomaly detection"
-git push origin main
-```
-
-### **6️⃣ Access Monitoring Dashboards**
-- **Grafana:** `kubectl port-forward svc/grafana 3000:80 -n monitoring`
-- **Kibana:** `kubectl port-forward svc/kibana 5601:80 -n monitoring`
-- **Prometheus:** `kubectl port-forward svc/prometheus-server 9090:80 -n monitoring`
-
----
-
-## 📊 Observability & Monitoring
-### **Grafana Dashboards**
-- **Kubernetes Cluster Overview**
-- **Anomaly Score Over Time**
-- **CPU & Memory Usage per Pod**
-
-### **Kibana Dashboards**
-- **Log Anomaly Analysis**
-- **Real-time Error Monitoring**
-- **Security Log Insights**
-
-### **OpenTelemetry Tracing**
-- **Request Latency Visualization**
-- **Distributed Tracing for API Calls**
-
----
-
-## 📬 Alerts & Auto-Healing
-🚨 **Slack Alerts on Log Anomalies** (via Prometheus AlertManager)  
-🚨 **Auto-Rollback if Deployment Fails** (via GitHub Actions & Kubernetes)
-
-```yaml
-- name: Check for Anomalies Before Deployment
-  run: |
-    RESPONSE=$(curl -X POST -H "Content-Type: application/json" -d '{"log": "Test log for anomaly detection"}' http://log-anomaly-service:5000/detect_anomaly)
-    IS_ANOMALOUS=$(echo $RESPONSE | jq '.is_anomalous')
-    if [ "$IS_ANOMALOUS" = "true" ]; then
-      echo "Anomaly detected! Aborting deployment."
-      exit 1
-    fi
-```
-
----
-
-## 🛑 Cleanup
-```bash
-terraform destroy -auto-approve
-helm uninstall elasticsearch kibana logstash -n monitoring
-```
-
----
-
-## 📌 Why Use This?
-✅ **AI-Powered Log Analysis** to detect security threats & system anomalies  
-✅ **Custom Dashboards for Kubernetes, Logs & Traces**  
-✅ **Auto-Rollback on Log Anomalies** before bad deployments occur  
-✅ **Slack Alerts for Critical Errors** to DevOps teams  
-✅ **Cloud-Native & CI/CD Ready** for scalable deployments  
-
-
-### ⭐ Like this project? Give it a star on GitHub! ⭐
-

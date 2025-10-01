@@ -5,4 +5,4 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-CMD ["python", "app.py"]
+CMD ["python", "log_anomaly_service.py"]
